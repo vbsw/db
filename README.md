@@ -12,6 +12,20 @@ InMem Data Base is distributed under the Boost Software License, version 1.0. (S
 
 InMem Data Base is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Boost Software License for more details.
 
+## Using Git
+Get the master branch and all refs of this project:
+
+	$ git clone https://github.com/vbsw/db.git
+
+See local and remote branches:
+
+	$ git branch -a
+
+Checkout other branches than master, for example the development branch:
+
+	$ git branch development origin/development
+	$ git checkout development
+
 ## References
-- https://www.eclipse.org/downloads/packages/
 - https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+- https://www.eclipse.org/downloads/packages/
