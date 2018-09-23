@@ -67,7 +67,7 @@ public final class DBColumn {
 					builder.append(separator);
 				builder.append(values[i]);
 			}
-			builder.append(prefix);
+			builder.append(suffix);
 			return builder.toString();
 		}
 

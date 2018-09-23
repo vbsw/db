@@ -123,7 +123,7 @@ public final class Search {
 		return -left - 1;
 	}
 
-	public static int binary (  final String[] values, final int[] indices, final int from, final int to, final String key ) {
+	public static int binary ( final String[] values, final int[] indices, final int from, final int to, final String key ) {
 		int left = from;
 		int right = to - 1;
 		while ( left <= right ) {
