@@ -14,18 +14,17 @@ package com.github.vbsw.db;
  */
 public final class Search {
 
-	public static <T> int binary ( final Object[] values, final int[] indices, final int from, final int to, final T key ) {
+	public static <T> int binary ( final Object[] values, final int[] indices, final int from, final int to, final Comparable<T> key ) {
 		int left = from;
 		int right = to - 1;
 		while ( left <= right ) {
 			final int middle = (left + right) / 2;
 			final int valueIndex = indices[middle];
 			@SuppressWarnings ( "unchecked" )
-			final Comparable<T> value = (Comparable<T>) values[valueIndex];
-			final int compareResult = value.compareTo(key);
-			if ( compareResult < 0 )
+			final int compareResult = key.compareTo((T) values[valueIndex]);
+			if ( compareResult > 0 )
 				left = middle + 1;
-			else if ( compareResult > 0 )
+			else if ( compareResult < 0 )
 				right = middle - 1;
 			else
 				return middle;
@@ -168,18 +167,17 @@ public final class Search {
 		return -left - 1;
 	}
 
-	public static <T> int binary ( final Object[] values, final UniqueOrderOfColumn[] indices, final int from, final int to, final T key ) {
+	public static <T> int binary ( final Object[] values, final UniqueOrderOfColumn[] indices, final int from, final int to, final Comparable<T> key ) {
 		int left = from;
 		int right = to - 1;
 		while ( left <= right ) {
 			final int middle = (left + right) / 2;
 			final int valueIndex = indices[middle].values[0];
 			@SuppressWarnings ( "unchecked" )
-			final Comparable<T> value = (Comparable<T>) values[valueIndex];
-			final int compareResult = value.compareTo(key);
-			if ( compareResult < 0 )
+			final int compareResult = key.compareTo((T) values[valueIndex]);
+			if ( compareResult > 0 )
 				left = middle + 1;
-			else if ( compareResult > 0 )
+			else if ( compareResult < 0 )
 				right = middle - 1;
 			else
 				return middle;
@@ -589,17 +587,16 @@ public final class Search {
 		return -left - 1;
 	}
 
-	public static <T> int binary ( final Object[] values, final int from, final int to, final T key ) {
+	public static <T> int binary ( final Object[] values, final int from, final int to, final Comparable<T> key ) {
 		int left = from;
 		int right = to - 1;
 		while ( left <= right ) {
 			final int middle = (left + right) / 2;
 			@SuppressWarnings ( "unchecked" )
-			final Comparable<T> value = (Comparable<T>) values[middle];
-			final int compareResult = value.compareTo(key);
-			if ( compareResult < 0 )
+			final int compareResult = key.compareTo((T) values[middle]);
+			if ( compareResult > 0 )
 				left = middle + 1;
-			else if ( compareResult > 0 )
+			else if ( compareResult < 0 )
 				right = middle - 1;
 			else
 				return middle;
