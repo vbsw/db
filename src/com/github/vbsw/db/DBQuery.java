@@ -43,28 +43,28 @@ public abstract class DBQuery {
 			this.column = column;
 		}
 
-		public void setLowerBound ( final int lowerBound, final boolean inclusive ) {
+		public final void setLowerBound ( final int lowerBound, final boolean inclusive ) {
 			this.lowerBoundEnabled = true;
 			this.lowerBound = lowerBound;
 			this.lowerBoundInclusive = inclusive;
 		}
 
-		public void setUpperBound ( final int upperBound, final boolean inclusive ) {
+		public final void setUpperBound ( final int upperBound, final boolean inclusive ) {
 			this.upperBoundEnabled = true;
 			this.upperBound = upperBound;
 			this.upperBoundInclusive = inclusive;
 		}
 
-		public void prepare ( ) {
+		public final void prepare ( ) {
 			if ( lowerBoundEnabled ) {
 				final int indicesIndex = Search.binary(column.values,column.indices,0,column.indicesLength,lowerBound);
 				if ( indicesIndex < 0 )
 					startIndex = -indicesIndex - 1;
 				else {
 					if ( lowerBoundInclusive )
-						startIndex = indicesIndex - 1;
+						startIndex = getLeftIndex(indicesIndex);
 					else
-						startIndex = indicesIndex;
+						startIndex = getRightIndex(indicesIndex) - 1;
 				}
 			} else {
 				startIndex = -1;
@@ -72,7 +72,7 @@ public abstract class DBQuery {
 			reset();
 		}
 
-		public boolean hasNext ( ) {
+		public final boolean hasNext ( ) {
 			boolean has = false;
 			currIndex++;
 			if ( currIndex < column.indicesLength ) {
@@ -89,8 +89,22 @@ public abstract class DBQuery {
 			return has;
 		}
 
-		public int getNextIndex ( ) {
+		public final int getNextIndex ( ) {
 			return column.indices[currIndex];
+		}
+
+		private int getRightIndex ( int indicesIndex ) {
+			indicesIndex++;
+			while ( indicesIndex < column.indicesLength && column.values[column.indices[indicesIndex]] == lowerBound )
+				indicesIndex++;
+			return indicesIndex;
+		}
+
+		private int getLeftIndex ( int indicesIndex ) {
+			indicesIndex--;
+			while ( indicesIndex > 0 && column.values[column.indices[indicesIndex]] == lowerBound )
+				indicesIndex--;
+			return indicesIndex;
 		}
 
 	}
@@ -105,28 +119,28 @@ public abstract class DBQuery {
 			this.column = column;
 		}
 
-		public void setLowerBound ( final int lowerBound, final boolean inclusive ) {
+		public final void setLowerBound ( final int lowerBound, final boolean inclusive ) {
 			this.lowerBoundEnabled = true;
 			this.lowerBound = lowerBound;
 			this.lowerBoundInclusive = inclusive;
 		}
 
-		public void setUpperBound ( final int upperBound, final boolean inclusive ) {
+		public final void setUpperBound ( final int upperBound, final boolean inclusive ) {
 			this.upperBoundEnabled = true;
 			this.upperBound = upperBound;
 			this.upperBoundInclusive = inclusive;
 		}
 
-		public void prepare ( ) {
+		public final void prepare ( ) {
 			if ( upperBoundEnabled ) {
 				final int indicesIndex = Search.binary(column.values,column.indices,0,column.indicesLength,upperBound);
 				if ( indicesIndex < 0 )
 					startIndex = -indicesIndex - 1;
 				else {
 					if ( upperBoundInclusive )
-						startIndex = indicesIndex + 1;
+						startIndex = getRightIndex(indicesIndex);
 					else
-						startIndex = indicesIndex;
+						startIndex = getLeftIndex(indicesIndex) + 1;
 				}
 			} else {
 				startIndex = column.indicesLength;
@@ -134,7 +148,7 @@ public abstract class DBQuery {
 			reset();
 		}
 
-		public boolean hasNext ( ) {
+		public final boolean hasNext ( ) {
 			boolean has = false;
 			currIndex--;
 			if ( currIndex >= 0 ) {
@@ -151,8 +165,22 @@ public abstract class DBQuery {
 			return has;
 		}
 
-		public int getNextIndex ( ) {
+		public final int getNextIndex ( ) {
 			return column.indices[currIndex];
+		}
+
+		private int getRightIndex ( int indicesIndex ) {
+			indicesIndex++;
+			while ( indicesIndex < column.indicesLength && column.values[column.indices[indicesIndex]] == lowerBound )
+				indicesIndex++;
+			return indicesIndex;
+		}
+
+		private int getLeftIndex ( int indicesIndex ) {
+			indicesIndex--;
+			while ( indicesIndex > 0 && column.values[column.indices[indicesIndex]] == lowerBound )
+				indicesIndex--;
+			return indicesIndex;
 		}
 
 	}
@@ -160,26 +188,26 @@ public abstract class DBQuery {
 	public static final class StringAsc extends DBQuery {
 
 		private final DBColumnIndexed.String column;
-		private java.lang.String lowerBound;
-		private java.lang.String upperBound;
+		private String lowerBound;
+		private String upperBound;
 
 		public StringAsc ( final DBColumnIndexed.String column ) {
 			this.column = column;
 		}
 
-		public void setLowerBound ( final java.lang.String lowerBound, final boolean inclusive ) {
+		public final void setLowerBound ( final String lowerBound, final boolean inclusive ) {
 			this.lowerBoundEnabled = true;
 			this.lowerBound = lowerBound;
 			this.lowerBoundInclusive = inclusive;
 		}
 
-		public void setUpperBound ( final java.lang.String upperBound, final boolean inclusive ) {
+		public final void setUpperBound ( final String upperBound, final boolean inclusive ) {
 			this.upperBoundEnabled = true;
 			this.upperBound = upperBound;
 			this.upperBoundInclusive = inclusive;
 		}
 
-		public void prepare ( ) {
+		public final void prepare ( ) {
 			if ( lowerBoundEnabled ) {
 				final int indicesIndex = Search.binary(column.values,column.indices,0,column.indicesLength,lowerBound);
 				if ( indicesIndex < 0 )
@@ -196,7 +224,7 @@ public abstract class DBQuery {
 			reset();
 		}
 
-		public boolean hasNext ( ) {
+		public final boolean hasNext ( ) {
 			boolean has = false;
 			currIndex++;
 			if ( currIndex < column.indicesLength ) {
@@ -213,7 +241,7 @@ public abstract class DBQuery {
 			return has;
 		}
 
-		public int getNextIndex ( ) {
+		public final int getNextIndex ( ) {
 			return column.indices[currIndex];
 		}
 
@@ -222,26 +250,26 @@ public abstract class DBQuery {
 	public static final class StringDesc extends DBQuery {
 
 		private final DBColumnIndexed.String column;
-		private java.lang.String lowerBound;
-		private java.lang.String upperBound;
+		private String lowerBound;
+		private String upperBound;
 
 		public StringDesc ( final DBColumnIndexed.String column ) {
 			this.column = column;
 		}
 
-		public void setLowerBound ( final java.lang.String lowerBound, final boolean inclusive ) {
+		public final void setLowerBound ( final String lowerBound, final boolean inclusive ) {
 			this.lowerBoundEnabled = true;
 			this.lowerBound = lowerBound;
 			this.lowerBoundInclusive = inclusive;
 		}
 
-		public void setUpperBound ( final java.lang.String upperBound, final boolean inclusive ) {
+		public final void setUpperBound ( final String upperBound, final boolean inclusive ) {
 			this.upperBoundEnabled = true;
 			this.upperBound = upperBound;
 			this.upperBoundInclusive = inclusive;
 		}
 
-		public void prepare ( ) {
+		public final void prepare ( ) {
 			if ( upperBoundEnabled ) {
 				final int indicesIndex = Search.binary(column.values,column.indices,0,column.indicesLength,upperBound);
 				if ( indicesIndex < 0 )
@@ -258,7 +286,7 @@ public abstract class DBQuery {
 			reset();
 		}
 
-		public boolean hasNext ( ) {
+		public final boolean hasNext ( ) {
 			boolean has = false;
 			currIndex--;
 			if ( currIndex >= 0 ) {
@@ -275,7 +303,7 @@ public abstract class DBQuery {
 			return has;
 		}
 
-		public int getNextIndex ( ) {
+		public final int getNextIndex ( ) {
 			return column.indices[currIndex];
 		}
 
