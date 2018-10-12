@@ -568,6 +568,27 @@ public final class Search {
 		return -left - 1;
 	}
 
+	public static int binaryByPrefix ( final String[] values, final int from, final int to, final String key ) {
+		int left = from;
+		int right = to - 1;
+		while ( left <= right ) {
+			final int middle = (left + right) / 2;
+			final String value = values[middle];
+			if ( !value.startsWith(key) ) {
+				final int compareResult = value.compareTo(key);
+				if ( compareResult < 0 )
+					left = middle + 1;
+				else if ( compareResult > 0 )
+					right = middle - 1;
+				else
+					return middle;
+			} else {
+				return middle;
+			}
+		}
+		return -left - 1;
+	}
+
 	public static <T> int binary ( final Object[] values, final int from, final int to, final T key ) {
 		int left = from;
 		int right = to - 1;
@@ -723,6 +744,15 @@ public final class Search {
 		for ( int i = from; i < to; i++ ) {
 			final String value = values[i];
 			if ( value == key || (value != null && value.compareTo(key) == 0) )
+				return i;
+		}
+		return -(to + 1);
+	}
+
+	public static int linearByPrefix ( final String[] values, final int from, final int to, final String key ) {
+		for ( int i = from; i < to; i++ ) {
+			final String value = values[i];
+			if ( value == key || (value != null && value.startsWith(key)) )
 				return i;
 		}
 		return -(to + 1);
