@@ -56,7 +56,7 @@ public class OrderOfColumn {
 		values[length] = null;
 	}
 
-	public <T> int search ( final Object[] values, final T value ) {
+	public <T> int search ( final Object[] values, final Comparable<T> value ) {
 		return Search.binary(values,this.values,0,length,value);
 	}
 
